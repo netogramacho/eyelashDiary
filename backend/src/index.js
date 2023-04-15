@@ -1,10 +1,3 @@
-const express = require("express");
-const app = express();
+const server = require('./server');
 
-const routes = require("./routes")
-
-app.use(express.json());
-
-app.use("/", routes);
-
-app.listen(3000);
+server.listen(process.env.PORT);
