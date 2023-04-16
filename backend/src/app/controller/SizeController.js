@@ -1,8 +1,8 @@
 const db = require("../config/db");
 
-class ClientsControler {
-  getClients(req, res) {
-    const q = "SELECT * FROM clients WHERE usr_id = ?";
+class SizeControler {
+  getLashSize(req, res) {
+    const q = "SELECT * FROM lashSize WHERE usr_id = ?";
     const values = [req.body.userId]
 
     db.query(q, [values], (err, data) => {
@@ -12,10 +12,10 @@ class ClientsControler {
     });
   }
 
-  addClient(req, res) {
-    const q = "INSERT INTO clients(cli_name, cli_phone, usr_id) VALUES(?)";
+  addLashSize(req, res) {
+    const q = "INSERT INTO lashSize(siz_value, usr_id) VALUES(?)";
 
-    const values = [req.body.name, req.body.phone, req.body.userId];
+    const values = [req.body.sizeValue, req.body.userId];
 
     db.query(q, [values], (err) => {
       if (err) return res.json(err);
@@ -24,13 +24,12 @@ class ClientsControler {
     });
   }
 
-  updateClient(req, res) {
+  updateLashSize(req, res) {
     const q =
-      "UPDATE clients SET cli_name = ?, cli_phone = ? WHERE cli_id = ?";
+      "UPDATE lashSize SET siz_value = ? WHERE siz_id = ?";
   
     const values = [
-      req.body.name,
-      req.body.phone,
+      req.body.sizeValue,
     ];
   
     db.query(q, [...values, req.params.id], (err) => {
@@ -40,9 +39,9 @@ class ClientsControler {
     });
   }
 
-  restoreClient(req, res) {
+  restoreLashSize(req, res) {
     const q =
-      "UPDATE clients SET cli_active = 1 WHERE cli_id = ?";
+      "UPDATE lashSize SET siz_active = 1 WHERE siz_id = ?";
   
     db.query(q, [req.params.id], (err) => {
       if (err) return res.json(err);
@@ -51,9 +50,9 @@ class ClientsControler {
     });
   }
 
-  deleteClient(req, res) {
+  deleteLashSize(req, res) {
     const q =
-      "UPDATE clients SET cli_active = 0 WHERE cli_id = ?";
+      "UPDATE lashSize SET siz_active = 0 WHERE siz_id = ?";
   
     db.query(q, [req.params.id], (err) => {
       if (err) return res.json(err);
@@ -63,4 +62,4 @@ class ClientsControler {
   }
 }
 
-module.exports = new ClientsControler();
+module.exports = new SizeControler();
