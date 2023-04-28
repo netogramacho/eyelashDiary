@@ -1,6 +1,6 @@
 const db = require("../config/db");
 
-class SizeControler {
+class SizesControler {
   getLashSize(req, res) {
     const q = "SELECT * FROM lashSize WHERE usr_id = ?";
     const values = [req.body.userId]
@@ -62,4 +62,4 @@ class SizeControler {
   }
 }
 
-module.exports = new SizeControler();
+module.exports = new SizesControler();

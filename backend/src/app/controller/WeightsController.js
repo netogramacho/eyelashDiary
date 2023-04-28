@@ -1,6 +1,6 @@
 const db = require("../config/db");
 
-class WeightControler {
+class WeightsControler {
   getLashWeight(req, res) {
     const q = "SELECT * FROM lashWeight WHERE usr_id = ?";
     const values = [req.body.userId]
@@ -62,4 +62,4 @@ class WeightControler {
   }
 }
 
-module.exports = new WeightControler();
+module.exports = new WeightsControler();

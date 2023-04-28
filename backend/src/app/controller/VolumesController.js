@@ -1,8 +1,8 @@
 const db = require("../config/db");
 
-class CurveControler {
-  getLashCurve(req, res) {
-    const q = "SELECT * FROM lashCurve WHERE usr_id = ?";
+class VolumesControler {
+  getLashVolume(req, res) {
+    const q = "SELECT * FROM lashVolume WHERE usr_id = ?";
     const values = [req.body.userId]
 
     db.query(q, [values], (err, data) => {
@@ -12,10 +12,10 @@ class CurveControler {
     });
   }
 
-  addLashCurve(req, res) {
-    const q = "INSERT INTO lashCurve(cur_value, usr_id) VALUES(?)";
+  addLashVolume(req, res) {
+    const q = "INSERT INTO lashVolume(vol_name, usr_id) VALUES(?)";
 
-    const values = [req.body.curveValue, req.body.userId];
+    const values = [req.body.volumeName, req.body.userId];
 
     db.query(q, [values], (err) => {
       if (err) return res.json(err);
@@ -24,12 +24,12 @@ class CurveControler {
     });
   }
 
-  updateLashCurve(req, res) {
+  updateLashVolume(req, res) {
     const q =
-      "UPDATE lashCurve SET cur_value = ? WHERE cur_id = ?";
+      "UPDATE lashVolume SET vol_name = ? WHERE vol_id = ?";
   
     const values = [
-      req.body.curveValue,
+      req.body.volumeName,
     ];
   
     db.query(q, [...values, req.params.id], (err) => {
@@ -39,9 +39,9 @@ class CurveControler {
     });
   }
 
-  restoreLashCurve(req, res) {
+  restoreLashVolume(req, res) {
     const q =
-      "UPDATE lashCurve SET cur_active = 1 WHERE cur_id = ?";
+      "UPDATE lashVolume SET vol_active = 1 WHERE vol_id = ?";
   
     db.query(q, [req.params.id], (err) => {
       if (err) return res.json(err);
@@ -50,9 +50,9 @@ class CurveControler {
     });
   }
 
-  deleteLashCurve(req, res) {
+  deleteLashVolume(req, res) {
     const q =
-      "UPDATE lashCurve SET cur_active = 0 WHERE cur_id = ?";
+      "UPDATE lashVolume SET vol_active = 0 WHERE vol_id = ?";
   
     db.query(q, [req.params.id], (err) => {
       if (err) return res.json(err);
@@ -62,4 +62,4 @@ class CurveControler {
   }
 }
 
-module.exports = new CurveControler();
+module.exports = new VolumesControler();

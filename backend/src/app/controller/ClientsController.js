@@ -1,65 +1,54 @@
-const db = require("../config/db");
-
+const ClientsModel = require("../model/ClientsModel");
 class ClientsControler {
-  getClients(req, res) {
-    const q = "SELECT * FROM clients WHERE usr_id = ?";
-    const values = [req.body.userId]
+  async getClients(req, res) {
+    let userId = req.body.userId;
+    let clientId = req.params.id;
 
-    db.query(q, [values], (err, data) => {
-      if (err) return res.json(err);
-
-      return res.status(200).json(data);
-    });
+    if (req.params.id) {
+      return res.status(200).json(await ClientsModel.findOne(userId, clientId));
+    } else {
+      return res.status(200).json(await ClientsModel.findAll(userId));
+    }
   }
 
-  addClient(req, res) {
-    const q = "INSERT INTO clients(cli_name, cli_phone, usr_id) VALUES(?)";
+  async addClient(req, res) {
+    let clientName = req.body.name;
+    let clientPhone = req.body.phone;
+    let userId = req.body.userId;
 
-    const values = [req.body.name, req.body.phone, req.body.userId];
+    if (!clientName || clientName === "") {
+      return res.status(400).json("Bad request.");
+    }
 
-    db.query(q, [values], (err) => {
-      if (err) return res.json(err);
-
-      return res.status(200).json("Usuário criado com sucesso.");
-    });
+    return res
+      .status(200)
+      .json(await ClientsModel.create(clientName, clientPhone, userId));
   }
 
-  updateClient(req, res) {
-    const q =
-      "UPDATE clients SET cli_name = ?, cli_phone = ? WHERE cli_id = ?";
-  
-    const values = [
-      req.body.name,
-      req.body.phone,
-    ];
-  
-    db.query(q, [...values, req.params.id], (err) => {
-      if (err) return res.json(err);
-  
-      return res.status(200).json("Usuário atualizado com sucesso.");
-    });
+  async updateClient(req, res) {
+    let clientName = req.body.name;
+    let clientPhone = req.body.phone;
+    let clientId = req.params.id;
+
+    if (!clientName || clientName === "") {
+      return res.status(400).json("Bad request.");
+    }
+
+    return res
+      .status(200)
+      .json(await ClientsModel.update(clientName, clientPhone, clientId));
   }
 
-  restoreClient(req, res) {
-    const q =
-      "UPDATE clients SET cli_active = 1 WHERE cli_id = ?";
-  
-    db.query(q, [req.params.id], (err) => {
-      if (err) return res.json(err);
-  
-      return res.status(200).json("Usuário restaurado com sucesso.");
-    });
+  async restoreClient(req, res) {
+    let clientId = req.params.id;
+
+    return res.status(200).json(await ClientsModel.restore(clientId));
   }
 
-  deleteClient(req, res) {
-    const q =
-      "UPDATE clients SET cli_active = 0 WHERE cli_id = ?";
-  
-    db.query(q, [req.params.id], (err) => {
-      if (err) return res.json(err);
-  
-      return res.status(200).json("Usuário excluído com sucesso.");
-    });
+  async deleteClient(req, res) {
+    let clientId = req.params.id;
+
+    return res.status(200).json(await ClientsModel.delete(clientId));
   }
 }
 

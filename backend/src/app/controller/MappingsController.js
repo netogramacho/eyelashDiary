@@ -1,15 +1,18 @@
-const db = require("../config/db");
+const MappingModel = require("../model/MappingsModel");
 
-class MappingControler {
-  getLashMapping(req, res) {
-    const q = "SELECT * FROM lashMapping WHERE usr_id = ?";
-    const values = [req.body.userId]
+class MappingsControler {
+  async getLashMapping(req, res) {
+    let userId = req.body.userId;
+    let mappingId = req.params.id
 
-    db.query(q, [values], (err, data) => {
-      if (err) return res.json(err);
+    if (req.params.id) {
+      return res
+        .status(200)
+        .json(await MappingModel.findOne(userId, mappingId));
+    } else {
+      return res.status(200).json(await MappingModel.findAll(userId));
+    }
 
-      return res.status(200).json(data);
-    });
   }
 
   addLashMapping(req, res) {
@@ -62,4 +65,4 @@ class MappingControler {
   }
 }
 
-module.exports = new MappingControler();
+module.exports = new MappingsControler();
